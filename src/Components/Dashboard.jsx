@@ -76,7 +76,7 @@ const Dashboard = () => {
                   className="nav-link px-0 align-middle text-white"
                 >
                   <i className="fs-4 bi-person ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">Leave</span>
+                  <span className="ms-2 d-none d-sm-inline">Leaves</span>
                 </Link>
               </li>
               <li className="w-100">
