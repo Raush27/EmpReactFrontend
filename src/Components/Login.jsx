@@ -27,7 +27,7 @@ const handleSubmit = (event) => {
             localStorage.setItem('valid', true);
             navigate('/dashboard');
         } else {
-            setError(result.data.Error);
+            setError(result.data.response);
         }
     })
     .catch((err) => {

@@ -1,33 +1,22 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const Employee = () => {
-  const [employee, setEmployee] = useState([]);
-  const navigate = useNavigate();
+const PayRoll = () => {
+  const [payrolls, setPayrolls] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/auth/employee")
+      .get("http://localhost:4000/auth/payrolls")
       .then((result) => {
         if (result.data.Status) {
-          setEmployee(result.data.Result);
+          setPayrolls(result.data.Result);
         } else {
           alert(result.data.Error);
         }
       })
       .catch((err) => console.log(err));
   }, []);
-
-  const AdminRecords = () => {
-    axios.get("http://localhost:4000/auth/admin_records").then((result) => {
-      if (result.data.Status) {
-        setAdmins(result.data.Result);
-      } else {
-        alert(result.data.Error);
-      }
-    });
-  };
 
   const handleDelete = (id) => {
     axios
@@ -43,46 +32,43 @@ const Employee = () => {
   return (
     <div className="px-5 mt-3">
       <div className="d-flex justify-content-center">
-        <h3>Employee List</h3>
+        <h3>PayRoll List</h3>
       </div>
-      <Link to="/dashboard/add_employee" className="btn btn-success">
-        Add Employee
+      <Link to="/dashboard/add_payroll" className="btn btn-success">
+        Add PayRoll
       </Link>
       <div className="mt-3">
         <table className="table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Image</th>
+              <th>Employee Name</th>
               <th>Email</th>
-              <th>Address</th>
               <th>Salary</th>
+              <th>Bonus</th>
+              <th>Deductions</th>
+              <th>Payment Date</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {employee.map((e) => (
-              <tr>
-                <td>{e.name}</td>
-                <td>
-                  <img
-                    src={`http://localhost:4000/Images/` + e.image}
-                    className="employee_image"
-                  />
-                </td>
-                <td>{e.email}</td>
-                <td>{e.address}</td>
-                <td>{e.salary}</td>
+            {payrolls.map((p) => (
+              <tr key={p._id}>
+                <td>{p.employee_id ? p.employee_id.name : "N/A"}</td>
+                <td>{p.employee_id ? p.employee_id.email : "N/A"}</td>
+                <td>{p.salary}</td>
+                <td>{p.bonus || "N/A"}</td>
+                <td>{p.deductions || "N/A"}</td>
+                <td>{new Date(p.payment_date).toLocaleDateString()}</td>
                 <td>
                   <Link
-                    to={`/dashboard/edit_employee/` + e._id}
+                    to={`/dashboard/edit_payroll/` + p._id}
                     className="btn btn-info btn-sm me-2"
                   >
                     Edit
                   </Link>
                   <button
                     className="btn btn-warning btn-sm"
-                    onClick={() => handleDelete(e.id)}
+                    onClick={() => handleDelete(p._id)}
                   >
                     Delete
                   </button>
@@ -96,4 +82,4 @@ const Employee = () => {
   );
 };
 
-export default Employee;
+export default PayRoll;
