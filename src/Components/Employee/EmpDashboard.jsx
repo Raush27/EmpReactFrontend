@@ -10,7 +10,7 @@ const EmpDashboard = () => {
   useEffect(() => {
     let user_id = localStorage.getItem("userid");
     axios
-      .get("http://localhost:4000/employee/detail/" +user_id)
+      .get("http://localhost:4000/employee/detail/" + user_id)
       .then((result) => {
         setEmployee(result?.data);
       })
@@ -35,7 +35,7 @@ const EmpDashboard = () => {
       <div className="row flex-nowrap">
         <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
           <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-          <Link
+            <Link
               to="/employee-dashboard"
               className="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-white text-decoration-none"
             >
@@ -47,44 +47,43 @@ const EmpDashboard = () => {
               className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
               id="menu"
             >
-                <li className="w-100">
+              <li className="w-100">
                 <Link
                   to="/employee-dashboard"
                   className="nav-link text-white px-0 align-middle"
                 >
-                  <i className="fs-4 bi-person ms-2"></i>
+                  <i className="fs-4 bi-house-door ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Home</span>
                 </Link>
               </li>
+
               <li className="w-100">
                 <Link
-                  to="/employee-dashboard/your-acount"
+                  to="/employee-dashboard/attendance"
                   className="nav-link text-white px-0 align-middle"
                 >
-                  <i className="fs-4 bi-person ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">Account</span>
+                  <i className="fs-4 bi-calendar-check ms-2"></i>
+                  <span className="ms-2 d-none d-sm-inline">Attendance</span>
                 </Link>
               </li>
+
               <li className="w-100">
                 <Link
                   to="/employee-dashboard/pending-leaves"
                   className="nav-link text-white px-0 align-middle"
                 >
-                  <i className="fs-4 bi-clock ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">
-                     Leaves
-                  </span>
+                  <i className="fs-4 bi-file-earmark-text ms-2"></i>
+                  <span className="ms-2 d-none d-sm-inline">Leaves</span>
                 </Link>
               </li>
+
               <li className="w-100">
                 <Link
                   to="/employee-dashboard/monthly-payroll"
                   className="nav-link text-white px-0 align-middle"
                 >
                   <i className="fs-4 bi-cash ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">
-                     Payroll
-                  </span>
+                  <span className="ms-2 d-none d-sm-inline">Payroll</span>
                 </Link>
               </li>
 

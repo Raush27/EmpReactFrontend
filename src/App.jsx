@@ -17,13 +17,13 @@ import EmployeeDetail from "./Components/EmployeeDetail";
 import PrivateRoute from "./Components/PrivateRoute";
 import PayRoll from "./Components/PayRoll";
 import AddPayroll from "./Components/AddPayroll";
-import EmployeeDetails from "./Components/Employee/EmployeeDetails";
 import EmpDashboard from "./Components/Employee/EmpDashboard";
 import ApplyLeave from "./Components/Employee/ApplyLeave";
 import PendingLeaves from "./Components/Employee/PendingLeaves";
 import MonthlyPayroll from "./Components/Employee/MonthlyPayroll";
 import PrivateEmpRoute from "./Components/PrivateEmpRoute";
 import EmpHome from "./Components/Employee/EmpHome";
+import Attendence from "./Components/Employee/Attendence";
 
 function App() {
   return (
@@ -71,12 +71,12 @@ function App() {
         >
           <Route path="" element={<EmpHome />}></Route>
           <Route
-            path="/employee-dashboard/your-acount"
-            element={<EmployeeDetails />}
-          ></Route>
-          <Route
             path="/employee-dashboard/apply-leave"
             element={<ApplyLeave />}
+          ></Route>
+            <Route
+            path="/employee-dashboard/attendance"
+            element={<Attendence />}
           ></Route>
           <Route
             path="/employee-dashboard/pending-leaves"
