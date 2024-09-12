@@ -85,6 +85,15 @@ const Dashboard = () => {
                   className="nav-link px-0 align-middle text-white"
                 >
                   <i className="fs-4 bi-person ms-2"></i>
+                  <span className="ms-2 d-none d-sm-inline">Attendence</span>
+                </Link>
+              </li>
+              <li className="w-100">
+                <Link
+                  to="/dashboard"
+                  className="nav-link px-0 align-middle text-white"
+                >
+                  <i className="fs-4 bi-person ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Payroll</span>
                 </Link>
               </li>
