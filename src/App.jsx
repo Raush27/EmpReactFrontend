@@ -24,6 +24,8 @@ import MonthlyPayroll from "./Components/Employee/MonthlyPayroll";
 import PrivateEmpRoute from "./Components/PrivateEmpRoute";
 import EmpHome from "./Components/Employee/EmpHome";
 import Attendence from "./Components/Employee/Attendence";
+import HrAttendence from "./Components/HrAttendence";
+import Leaves from "./Components/Leaves";
 
 function App() {
   return (
@@ -46,6 +48,9 @@ function App() {
           <Route path="/dashboard/employee" element={<Employee />}></Route>
           <Route path="/dashboard/payroll" element={<PayRoll />}></Route>
           <Route path="/dashboard/category" element={<Category />}></Route>
+          <Route path="/dashboard/attendence" element={<HrAttendence />}></Route>
+          <Route path="/dashboard/leaves" element={<Leaves />}></Route>
+
           <Route
             path="/dashboard/add_category"
             element={<AddCategory />}
