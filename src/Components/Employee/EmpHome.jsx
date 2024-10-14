@@ -3,11 +3,15 @@ import React, { useEffect, useState } from "react";
 
 const EmpHome = () => {
   const [profile, setProfile] = useState();
-  const [totalLeaves, setTotalLeaves] = useState(20);
+  const [totalLeaves, setTotalLeaves] = useState(24);
   const [pendingLeaves, setPendingLeaves] = useState(5);
   const [currentDateTime, setCurrentDateTime] = useState(
     new Date().toLocaleString()
   );
+  const [attendanceData, setAttendanceData] = useState([]);
+  const [currentMonthPresentCount, setCurrentMonthPresentCount] = useState(0);
+  const [currentMonthTotalDays, setCurrentMonthTotalDays] = useState(0);
+  const [payroll, setPayRoll] = useState([]);
 
   useEffect(() => {
     let user_id = localStorage.getItem("userid");
@@ -19,11 +23,111 @@ const EmpHome = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  // Update date and time every minute
+  useEffect(() => {
+    // On initial load, calculate the current and previous month data for summary
+    calculateMonthData(
+      new Date().getMonth() + 1,
+      new Date().getFullYear(),
+      "current"
+    );
+    const previousMonth =
+      new Date().getMonth() === 0 ? 12 : new Date().getMonth();
+    const previousYear =
+      new Date().getMonth() === 0
+        ? new Date().getFullYear() - 1
+        : new Date().getFullYear();
+    calculateMonthData(previousMonth, previousYear, "previous");
+  }, []);
+
+  const fetchAttendanceRecords = (month, year, type) => {
+    let user_id = localStorage.getItem("userid");
+    axios
+      .get(`http://localhost:4000/auth/attendance_report/${user_id}`)
+      .then((result) => {
+        if (result.data.status) {
+          const filteredAttendance = result.data.attendance.filter(
+            (attendance) => {
+              const attendanceDate = new Date(attendance.date);
+              return (
+                attendanceDate.getMonth() + 1 === month &&
+                attendanceDate.getFullYear() === year
+              );
+            }
+          );
+
+          if (type === "current") {
+            setAttendanceData(filteredAttendance); // Update the table for the current filter
+          }
+
+          calculatePresentCount(filteredAttendance, type); // Calculate present count
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const calculateMonthData = (month, year, type) => {
+    const daysInMonth = new Date(year, month, 0).getDate(); // Get total days in the month
+    if (type === "current") {
+      setCurrentMonthTotalDays(daysInMonth);
+      fetchAttendanceRecords(month, year, type); // Fetch records for the current month
+    }
+  };
+
+  const calculatePresentCount = (attendanceData, type) => {
+    const present = attendanceData.filter(
+      (record) => record.status === "Present"
+    ).length;
+    if (type === "current") {
+      setCurrentMonthPresentCount(present);
+    }
+  };
+
+  useEffect(() => {
+    const user_id = localStorage.getItem("userid");
+    axios
+      .get(`http://localhost:4000/auth/payroll?employee_id=${user_id}`)
+      .then((result) => {
+        setPayRoll(result?.data?.Result || []);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const getCurrentMonthPayroll = (payrollData) => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth(); // Months are 0-based in JS
+    const currentYear = currentDate.getFullYear();
+
+    // Filter payrolls for the current month and year
+    const currentMonthPayroll = payrollData.filter((payroll) => {
+      const paymentDate = new Date(payroll.payment_date);
+      return (
+        paymentDate.getMonth() === currentMonth &&
+        paymentDate.getFullYear() === currentYear
+      );
+    });
+
+    return currentMonthPayroll[0];
+  };
+
+  const currentMonthPayroll = getCurrentMonthPayroll(payroll);
+
+  const netSalary =
+    currentMonthPayroll?.salary +
+    currentMonthPayroll?.bonus -
+    currentMonthPayroll?.deductions;
+
+  const paymentDate = new Date(currentMonthPayroll?.payment_date);
+  const formattedDate = paymentDate.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+
+  // Update time continuously every second
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentDateTime(new Date().toLocaleString());
-    }, 60000); // Update every minute
+    }, 1000); // Update every second
 
     return () => clearInterval(interval); // Cleanup on component unmount
   }, []);
@@ -43,7 +147,7 @@ const EmpHome = () => {
           <div className="card shadow-sm border-0">
             <div className="card-body text-center">
               <i className="fs-4 bi-check-circle text-success mb-3"></i>
-              <h4 className="card-title">Total Leaves</h4>
+              <h4 className="card-title">Total Annual Leaves</h4>
               <p className="display-4 text-success">{totalLeaves}</p>
             </div>
           </div>
@@ -93,6 +197,8 @@ const EmpHome = () => {
 
       <div className="row">
         {/* Attendance Record Card */}
+        <h5 className="card-title mb-3">Current Month Summary</h5>
+
         <div className="col-md-6 mb-4">
           <div className="card shadow-sm border-0">
             <div className="card-body">
@@ -100,14 +206,21 @@ const EmpHome = () => {
               <table className="table table-bordered">
                 <thead>
                   <tr>
+                    <th>Month</th>
                     <th>Present Days</th>
-                    <th>Absent Days</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{profile?.presentDays || 0}</td>
-                    <td>{profile?.absentDays || 0}</td>
+                    <td>
+                      {new Date().toLocaleString("default", {
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </td>
+                    <td>
+                      {currentMonthTotalDays}/ {currentMonthPresentCount} days
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -129,31 +242,8 @@ const EmpHome = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{profile?.lastPayrollMonth || "N/A"}</td>
-                    <td>{profile?.netSalary || "N/A"}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        {/* Upcoming Holidays Card */}
-        <div className="col-md-6 mb-4">
-          <div className="card shadow-sm border-0">
-            <div className="card-body">
-              <h4 className="card-title">Upcoming Holidays</h4>
-              <table className="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>Holiday</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{profile?.nextHoliday || "N/A"}</td>
-                    <td>{profile?.nextHolidayDate || "N/A"}</td>
+                    <td>{formattedDate || "N/A"}</td>
+                    <td>₹{netSalary}</td>
                   </tr>
                 </tbody>
               </table>

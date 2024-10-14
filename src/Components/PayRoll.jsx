@@ -47,7 +47,7 @@ const PayRoll = () => {
               <th>Bonus</th>
               <th>Deductions</th>
               <th>Payment Date</th>
-              <th>Action</th>
+              {/* <th>Action</th> */}
             </tr>
           </thead>
           <tbody>
@@ -59,7 +59,7 @@ const PayRoll = () => {
                 <td>{p.bonus || "N/A"}</td>
                 <td>{p.deductions || "N/A"}</td>
                 <td>{new Date(p.payment_date).toLocaleDateString()}</td>
-                <td>
+                {/* <td>
                   <Link
                     to={`/dashboard/edit_payroll/` + p._id}
                     className="btn btn-info btn-sm me-2"
@@ -72,7 +72,7 @@ const PayRoll = () => {
                   >
                     Delete
                   </button>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>

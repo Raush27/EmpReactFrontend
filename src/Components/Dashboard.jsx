@@ -36,7 +36,7 @@ const Dashboard = () => {
                   to="/dashboard"
                   className="nav-link text-white px-0 align-middle"
                 >
-                  <i className="fs-4 bi-speedometer2 ms-2"></i>
+                  <i className="bi-speedometer2 ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Dashboard</span>
                 </Link>
               </li>
@@ -45,7 +45,7 @@ const Dashboard = () => {
                   to="/dashboard/employee"
                   className="nav-link px-0 align-middle text-white"
                 >
-                  <i className="fs-4 bi-people ms-2"></i>
+                  <i className="bi-people ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">
                     Manage Employees
                   </span>
@@ -56,7 +56,7 @@ const Dashboard = () => {
                   to="/dashboard/category"
                   className="nav-link px-0 align-middle text-white"
                 >
-                  <i className="fs-4 bi-columns ms-2"></i>
+                  <i className="bi-columns ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Category</span>
                 </Link>
               </li>
@@ -65,7 +65,8 @@ const Dashboard = () => {
                   to="/dashboard/leaves"
                   className="nav-link px-0 align-middle text-white"
                 >
-                  <i className="fs-4 bi-person ms-2"></i>
+                  <i className="bi bi-calendar3 ms-2"></i>{" "}
+                  {/* Calendar/Leaves icon */}
                   <span className="ms-2 d-none d-sm-inline">Leaves</span>
                 </Link>
               </li>
@@ -74,8 +75,9 @@ const Dashboard = () => {
                   to="/dashboard/attendence"
                   className="nav-link px-0 align-middle text-white"
                 >
-                  <i className="fs-4 bi-person ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">Attendence</span>
+                  <i className="bi bi-clock ms-2"></i>{" "}
+                  {/* Clock icon for Attendance */}
+                  <span className="ms-2 d-none d-sm-inline">Attendance</span>
                 </Link>
               </li>
               <li className="w-100">
@@ -83,13 +85,15 @@ const Dashboard = () => {
                   to="/dashboard/payroll"
                   className="nav-link px-0 align-middle text-white"
                 >
-                  <i className="fs-4 bi-person ms-2"></i>
+                  <i className="bi bi-wallet2 ms-2"></i>{" "}
+                  {/* Wallet icon for Payroll */}
                   <span className="ms-2 d-none d-sm-inline">Payroll</span>
                 </Link>
               </li>
+
               <li className="w-100" onClick={handleLogout}>
                 <Link className="nav-link px-0 align-middle text-white">
-                  <i className="fs-4 bi-power ms-2"></i>
+                  <i className="bi-power ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Logout</span>
                 </Link>
               </li>

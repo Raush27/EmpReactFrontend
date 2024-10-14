@@ -2,7 +2,6 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Login from "./Components/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./Components/Dashboard";
 import Home from "./Components/Home";
@@ -12,13 +11,10 @@ import AddCategory from "./Components/AddCategory";
 import AddEmployee from "./Components/AddEmployee";
 import EditEmployee from "./Components/EditEmployee";
 import Start from "./Components/Start";
-import EmployeeLogin from "./Components/EmployeeLogin";
-import EmployeeDetail from "./Components/EmployeeDetail";
 import PrivateRoute from "./Components/PrivateRoute";
 import PayRoll from "./Components/PayRoll";
 import AddPayroll from "./Components/AddPayroll";
 import EmpDashboard from "./Components/Employee/EmpDashboard";
-import ApplyLeave from "./Components/Employee/ApplyLeave";
 import PendingLeaves from "./Components/Employee/PendingLeaves";
 import MonthlyPayroll from "./Components/Employee/MonthlyPayroll";
 import PrivateEmpRoute from "./Components/PrivateEmpRoute";
@@ -33,9 +29,6 @@ function App() {
       <ToastContainer />
       <Routes>
         <Route path="/" element={<Start />}></Route>
-        <Route path="/adminlogin" element={<Login />}></Route>
-        <Route path="/employee_login" element={<EmployeeLogin />}></Route>
-        <Route path="/employee_detail/:id" element={<EmployeeDetail />}></Route>
         <Route
           path="/dashboard"
           element={
@@ -48,7 +41,10 @@ function App() {
           <Route path="/dashboard/employee" element={<Employee />}></Route>
           <Route path="/dashboard/payroll" element={<PayRoll />}></Route>
           <Route path="/dashboard/category" element={<Category />}></Route>
-          <Route path="/dashboard/attendence" element={<HrAttendence />}></Route>
+          <Route
+            path="/dashboard/attendence"
+            element={<HrAttendence />}
+          ></Route>
           <Route path="/dashboard/leaves" element={<Leaves />}></Route>
 
           <Route
@@ -75,11 +71,8 @@ function App() {
           }
         >
           <Route path="" element={<EmpHome />}></Route>
+
           <Route
-            path="/employee-dashboard/apply-leave"
-            element={<ApplyLeave />}
-          ></Route>
-            <Route
             path="/employee-dashboard/attendance"
             element={<Attendence />}
           ></Route>

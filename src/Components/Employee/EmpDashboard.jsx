@@ -52,7 +52,7 @@ const EmpDashboard = () => {
                   to="/employee-dashboard"
                   className="nav-link text-white px-0 align-middle"
                 >
-                  <i className="fs-4 bi-house-door ms-2"></i>
+                  <i className="bi-house-door ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Home</span>
                 </Link>
               </li>
@@ -62,7 +62,7 @@ const EmpDashboard = () => {
                   to="/employee-dashboard/attendance"
                   className="nav-link text-white px-0 align-middle"
                 >
-                  <i className="fs-4 bi-calendar-check ms-2"></i>
+                  <i className="bi-calendar-check ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Attendance</span>
                 </Link>
               </li>
@@ -72,7 +72,7 @@ const EmpDashboard = () => {
                   to="/employee-dashboard/pending-leaves"
                   className="nav-link text-white px-0 align-middle"
                 >
-                  <i className="fs-4 bi-file-earmark-text ms-2"></i>
+                  <i className="bi-file-earmark-text ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Leaves</span>
                 </Link>
               </li>
@@ -82,14 +82,14 @@ const EmpDashboard = () => {
                   to="/employee-dashboard/monthly-payroll"
                   className="nav-link text-white px-0 align-middle"
                 >
-                  <i className="fs-4 bi-cash ms-2"></i>
+                  <i className="bi-cash ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Payroll</span>
                 </Link>
               </li>
 
               <li className="w-100" onClick={handleLogout}>
                 <Link className="nav-link px-0 align-middle text-white">
-                  <i className="fs-4 bi-power ms-2"></i>
+                  <i className="bi-power ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Logout</span>
                 </Link>
               </li>

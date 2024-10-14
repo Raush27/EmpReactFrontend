@@ -1,0 +1,64 @@
+.tab-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+    position: relative; 
+    border-radius: 20px; 
+    overflow: hidden; 
+  }
+  
+  .tab-button {
+    padding: 10px 20px;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+    border: none;
+    flex: 1;
+    cursor: pointer;
+    position: relative; 
+    z-index: 1; 
+    color: black; /* Default text color */
+    background-color: transparent; /* Default background */
+  }
+  
+  .tab-button.active {
+    color: white; /* Active text color */
+  }
+  
+  .tab-button.inactive {
+    background-color: transparent;
+    color: black; /* Inactive text color */
+  }
+  
+  .tab-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: black; 
+    z-index: 0; 
+    transition: transform 0.3s; 
+  }
+  
+  .tab-container .tab-button.active {
+    z-index: 2; 
+  }
+  
+  .tab-container .tab-button:nth-child(1).active ~ .tab-container::after {
+    transform: translateY(0); 
+  }
+  
+  .tab-container .tab-button:nth-child(2).active ~ .tab-container::after {
+    transform: translateY(100%); 
+  }
+  
+  /* Styles for the inactive button on black background */
+  .tab-container .tab-button.inactive {
+    background-color: white; /* Background color when inactive */
+    color: black; /* Text color when inactive */
+  }
+  
+  .tab-container .tab-button.inactive:hover {
+    background-color: #f0f0f0; /* Light grey on hover */
+  }
+  

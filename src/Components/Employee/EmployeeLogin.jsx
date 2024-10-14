@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "../../src/style.css";
+import "../../../src/style.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const Login = () => {
+const EmployeeLogin = () => {
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -42,17 +42,13 @@ const Login = () => {
     }
 
     axios
-      .post("http://localhost:4000/auth/adminlogin", values, {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      })
+      .post("http://localhost:4000/employee/employee_login", values)
       .then((result) => {
         if (result.data.loginStatus) {
           localStorage.setItem("valid", true);
+          localStorage.setItem("userid", result.data.id);
           toast.success("Login successful!");
-          navigate("/dashboard");
+          navigate("/employee-dashboard");
         } else {
           toast.error(result.data.Error);
         }
@@ -66,7 +62,7 @@ const Login = () => {
   return (
     <div className="justify-content-center align-items-center">
       <div className="p-3">
-        <h2>Admin Login</h2>
+        <h2>Employee Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="email">
@@ -104,4 +100,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default EmployeeLogin;
