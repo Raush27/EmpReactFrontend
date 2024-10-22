@@ -17,7 +17,7 @@ const Start = () => {
           if (result.data.role === "admin") {
             navigate("/dashboard");
           } else {
-            navigate("/employee_detail/" + result.data._id);
+            navigate("/");
           }
         }
       })
@@ -26,7 +26,10 @@ const Start = () => {
 
   return (
     <div className="d-flex justify-content-center align-items-center w-100 vh-100 loginPage">
-      <div className="p-4 rounded border shadow-sm loginForm" style={{ width: "500px" }}>
+      <div
+        className="p-4 rounded border shadow-sm loginForm"
+        style={{ width: "500px" }}
+      >
         <h2 className="text-center mb-4">LogIn !!</h2>
         <div className="tab-container">
           <button

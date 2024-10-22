@@ -57,6 +57,7 @@ const Employee = () => {
               <th>Email</th>
               <th>Address</th>
               <th>Salary</th>
+              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -73,6 +74,8 @@ const Employee = () => {
                 <td>{e.email}</td>
                 <td>{e.address}</td>
                 <td>{e.salary}</td>
+                <td>{e.status}</td>
+
                 <td>
                   <Link
                     to={`/dashboard/edit_employee/` + e._id}
@@ -82,7 +85,7 @@ const Employee = () => {
                   </Link>
                   <button
                     className="btn btn-warning btn-sm"
-                    onClick={() => handleDelete(e.id)}
+                    onClick={() => handleDelete(e._id)}
                   >
                     Delete
                   </button>

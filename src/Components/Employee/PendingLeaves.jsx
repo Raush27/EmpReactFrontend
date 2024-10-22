@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const PendingLeaves = () => {
-  const [leaveData, setLeaveData] = useState([]); 
-  const [isOpen, setIsOpen] = useState(false); 
+  const [leaveData, setLeaveData] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [leave, setLeave] = useState({
     leave_type: "Sick Leave",
     start_date: "",
@@ -23,7 +23,7 @@ const PendingLeaves = () => {
       .then((result) => {
         if (result.data.Status) {
           setLeaveData(result.data.Result);
-        } 
+        }
       })
       .catch((err) => console.log(err));
   };
@@ -53,15 +53,20 @@ const PendingLeaves = () => {
           fetchLeaveRecords(); 
           closeForm(); 
         } else {
-          toast.error(result.data.Error);
+          toast.error(result.data.Error || "Failed to apply for leave.");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        const errorMessage = err.response?.data?.Error || "Something went wrong!";
+        console.error("Error:", errorMessage); 
+        toast.error(errorMessage); 
+      });
   };
+  
+  
 
   return (
-  
-  <div className="container my-5">
+    <div className="container my-5">
       <div className="row justify-content-center">
         <h3 className="text-center mb-4">Apply for Leave</h3>
       </div>
@@ -168,9 +173,12 @@ const PendingLeaves = () => {
                   <td>{leave.leave_type}</td>
                   <td>{new Date(leave.start_date).toLocaleDateString()}</td>
                   <td>{new Date(leave.end_date).toLocaleDateString()}</td>
-                  <td>{leave.reason ? leave.reason : 'N/A'}</td>
-                  <td>{leave.status.charAt(0).toUpperCase() + leave.status.slice(1)}</td>
-                  </tr>
+                  <td>{leave.remarks ? leave.remarks : "N/A"}</td>
+                  <td>
+                    {leave.status.charAt(0).toUpperCase() +
+                      leave.status.slice(1)}
+                  </td>
+                </tr>
               ))
             ) : (
               <tr>

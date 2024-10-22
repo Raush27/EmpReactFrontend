@@ -28,7 +28,10 @@ function App() {
     <BrowserRouter>
       <ToastContainer />
       <Routes>
-        <Route path="/" element={<Start />}></Route>
+        {/* Public Route */}
+        <Route path="/" element={<Start />} />
+
+        {/* Protected Admin Routes */}
         <Route
           path="/dashboard"
           element={
@@ -37,31 +40,19 @@ function App() {
             </PrivateRoute>
           }
         >
-          <Route path="" element={<Home />}></Route>
-          <Route path="/dashboard/employee" element={<Employee />}></Route>
-          <Route path="/dashboard/payroll" element={<PayRoll />}></Route>
-          <Route path="/dashboard/category" element={<Category />}></Route>
-          <Route
-            path="/dashboard/attendence"
-            element={<HrAttendence />}
-          ></Route>
-          <Route path="/dashboard/leaves" element={<Leaves />}></Route>
-
-          <Route
-            path="/dashboard/add_category"
-            element={<AddCategory />}
-          ></Route>
-          <Route
-            path="/dashboard/add_employee"
-            element={<AddEmployee />}
-          ></Route>
-          <Route path="/dashboard/add_payroll" element={<AddPayroll />}></Route>
-          <Route
-            path="/dashboard/edit_employee/:id"
-            element={<EditEmployee />}
-          ></Route>
+          <Route path="" element={<Home />} />
+          <Route path="/dashboard/employee" element={<Employee />} />
+          <Route path="/dashboard/payroll" element={<PayRoll />} />
+          <Route path="/dashboard/category" element={<Category />} />
+          <Route path="/dashboard/attendence" element={<HrAttendence />} />
+          <Route path="/dashboard/leaves" element={<Leaves />} />
+          <Route path="/dashboard/add_category" element={<AddCategory />} />
+          <Route path="/dashboard/add_employee" element={<AddEmployee />} />
+          <Route path="/dashboard/add_payroll" element={<AddPayroll />} />
+          <Route path="/dashboard/edit_employee/:id" element={<EditEmployee />} />
         </Route>
 
+        {/* Protected Employee Routes */}
         <Route
           path="/employee-dashboard"
           element={
@@ -70,20 +61,10 @@ function App() {
             </PrivateEmpRoute>
           }
         >
-          <Route path="" element={<EmpHome />}></Route>
-
-          <Route
-            path="/employee-dashboard/attendance"
-            element={<Attendence />}
-          ></Route>
-          <Route
-            path="/employee-dashboard/pending-leaves"
-            element={<PendingLeaves />}
-          ></Route>
-          <Route
-            path="/employee-dashboard/monthly-payroll"
-            element={<MonthlyPayroll />}
-          ></Route>
+          <Route path="" element={<EmpHome />} />
+          <Route path="/employee-dashboard/attendance" element={<Attendence />} />
+          <Route path="/employee-dashboard/pending-leaves" element={<PendingLeaves />} />
+          <Route path="/employee-dashboard/monthly-payroll" element={<MonthlyPayroll />} />
         </Route>
       </Routes>
     </BrowserRouter>

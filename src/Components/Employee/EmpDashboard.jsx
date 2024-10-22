@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
 
 const EmpDashboard = () => {
   const [employee, setEmployee] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation(); // Get current path
 
   useEffect(() => {
     let user_id = localStorage.getItem("userid");
@@ -50,47 +51,63 @@ const EmpDashboard = () => {
               <li className="w-100">
                 <Link
                   to="/employee-dashboard"
-                  className="nav-link text-white px-0 align-middle"
+                  className={`nav-link text-white px-0 align-middle ${
+                    location.pathname === "/employee-dashboard" ? "active" : ""
+                  }`}
                 >
                   <i className="bi-house-door ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">Home</span>
+                  <span className="ms-2 d-none d-sm-inline px-2">Home</span>
                 </Link>
               </li>
 
               <li className="w-100">
                 <Link
                   to="/employee-dashboard/attendance"
-                  className="nav-link text-white px-0 align-middle"
+                  className={`nav-link text-white px-0 align-middle ${
+                    location.pathname === "/employee-dashboard/attendance"
+                      ? "active"
+                      : ""
+                  }`}
                 >
                   <i className="bi-calendar-check ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">Attendance</span>
+                  <span className="ms-2 d-none d-sm-inline px-2">
+                    Attendance
+                  </span>
                 </Link>
               </li>
 
               <li className="w-100">
                 <Link
                   to="/employee-dashboard/pending-leaves"
-                  className="nav-link text-white px-0 align-middle"
+                  className={`nav-link text-white px-0 align-middle ${
+                    location.pathname === "/employee-dashboard/pending-leaves"
+                      ? "active"
+                      : ""
+                  }`}
                 >
                   <i className="bi-file-earmark-text ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">Leaves</span>
+                  <span className="ms-2 d-none d-sm-inline px-2">Leaves</span>
                 </Link>
               </li>
 
               <li className="w-100">
                 <Link
                   to="/employee-dashboard/monthly-payroll"
-                  className="nav-link text-white px-0 align-middle"
+                  className={`nav-link text-white px-0 align-middle ${
+                    location.pathname === "/employee-dashboard/monthly-payroll"
+                      ? "active"
+                      : ""
+                  }`}
                 >
                   <i className="bi-cash ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">Payroll</span>
+                  <span className="ms-2 d-none d-sm-inline px-2">Payroll</span>
                 </Link>
               </li>
 
               <li className="w-100" onClick={handleLogout}>
                 <Link className="nav-link px-0 align-middle text-white">
                   <i className="bi-power ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">Logout</span>
+                  <span className="ms-2 d-none d-sm-inline px-2">Logout</span>
                 </Link>
               </li>
             </ul>

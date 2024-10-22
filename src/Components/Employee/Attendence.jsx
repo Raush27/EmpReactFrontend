@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import * as XLSX from "xlsx"; // Import the XLSX library
 
 const Attendance = () => {
   const [attendanceData, setAttendanceData] = useState([]);
@@ -103,6 +104,22 @@ const Attendance = () => {
     const month = date.toLocaleString("default", { month: "short" }); // Abbreviated month
     const year = date.getFullYear();
     return `${day} ${month} ${year}`;
+  };
+
+  const downloadExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(
+      attendanceData.map((attendance) => ({
+        Date: formatDate(attendance.date),
+        Status: attendance.status,
+        Remarks: attendance.remarks ? attendance.remarks : "N/A",
+      }))
+    );
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Attendance");
+
+    // Download Excel file
+    XLSX.writeFile(workbook, `Attendance_${filterMonth}_${filterYear}.xlsx`);
   };
 
   return (
@@ -215,12 +232,17 @@ const Attendance = () => {
           ) : (
             <tr>
               <td colSpan="3" className="text-center">
-                No attendance records found for this month.
+                No attendance records found.
               </td>
             </tr>
           )}
         </tbody>
       </table>
+
+      {/* Download Button */}
+      <button className="btn btn-success mt-4" onClick={downloadExcel}>
+        <i className="bi bi-file-earmark-excel-fill me-2"></i>Download Excel
+      </button>
     </div>
   );
 };

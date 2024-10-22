@@ -178,6 +178,7 @@ const EmpHome = () => {
               <p className="card-text text-muted">
                 {profile?.category_id.name}
               </p>
+              <span>Address: {profile?.address}</span>
               <p className="card-text">{profile?.email}</p>
             </div>
           </div>

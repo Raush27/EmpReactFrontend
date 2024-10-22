@@ -1,19 +1,25 @@
 import React from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
 
 const Dashboard = () => {
-  const anvigate = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
   axios.defaults.withCredentials = true;
+
   const handleLogout = () => {
     axios.get("http://localhost:4000/auth/logout").then((result) => {
       if (result.data.Status) {
         localStorage.removeItem("valid");
-        anvigate("/");
+        navigate("/");
       }
     });
   };
+
+  // Helper function to check if the current path matches the link's path
+  const isActive = (path) => location.pathname === path;
+
   return (
     <div className="container-fluid">
       <div className="row flex-nowrap">
@@ -34,19 +40,25 @@ const Dashboard = () => {
               <li className="w-100">
                 <Link
                   to="/dashboard"
-                  className="nav-link text-white px-0 align-middle"
+                  className={`nav-link text-white px-0 align-middle ${
+                    isActive("/dashboard") ? "active" : ""
+                  }`}
                 >
                   <i className="bi-speedometer2 ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">Dashboard</span>
+                  <span className="ms-2 d-none d-sm-inline px-2">
+                    Dashboard
+                  </span>
                 </Link>
               </li>
               <li className="w-100">
                 <Link
                   to="/dashboard/employee"
-                  className="nav-link px-0 align-middle text-white"
+                  className={`nav-link text-white px-0 align-middle ${
+                    isActive("/dashboard/employee") ? "active" : ""
+                  }`}
                 >
                   <i className="bi-people ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">
+                  <span className="ms-2 d-none d-sm-inline px-2">
                     Manage Employees
                   </span>
                 </Link>
@@ -54,47 +66,54 @@ const Dashboard = () => {
               <li className="w-100">
                 <Link
                   to="/dashboard/category"
-                  className="nav-link px-0 align-middle text-white"
+                  className={`nav-link text-white px-0 align-middle ${
+                    isActive("/dashboard/category") ? "active" : ""
+                  }`}
                 >
                   <i className="bi-columns ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">Category</span>
+                  <span className="ms-2 d-none d-sm-inline px-2">Category</span>
                 </Link>
               </li>
               <li className="w-100">
                 <Link
                   to="/dashboard/leaves"
-                  className="nav-link px-0 align-middle text-white"
+                  className={`nav-link text-white px-0 align-middle ${
+                    isActive("/dashboard/leaves") ? "active" : ""
+                  }`}
                 >
-                  <i className="bi bi-calendar3 ms-2"></i>{" "}
-                  {/* Calendar/Leaves icon */}
-                  <span className="ms-2 d-none d-sm-inline">Leaves</span>
+                  <i className="bi bi-calendar3 ms-2"></i>
+                  <span className="ms-2 d-none d-sm-inline px-2">Leaves</span>
                 </Link>
               </li>
               <li className="w-100">
                 <Link
                   to="/dashboard/attendence"
-                  className="nav-link px-0 align-middle text-white"
+                  className={`nav-link text-white px-0 align-middle ${
+                    isActive("/dashboard/attendence") ? "active" : ""
+                  }`}
                 >
-                  <i className="bi bi-clock ms-2"></i>{" "}
-                  {/* Clock icon for Attendance */}
-                  <span className="ms-2 d-none d-sm-inline">Attendance</span>
+                  <i className="bi bi-clock ms-2"></i>
+                  <span className="ms-2 d-none d-sm-inline px-2">
+                    Attendance
+                  </span>
                 </Link>
               </li>
               <li className="w-100">
                 <Link
                   to="/dashboard/payroll"
-                  className="nav-link px-0 align-middle text-white"
+                  className={`nav-link text-white px-0 align-middle ${
+                    isActive("/dashboard/payroll") ? "active" : ""
+                  }`}
                 >
-                  <i className="bi bi-wallet2 ms-2"></i>{" "}
-                  {/* Wallet icon for Payroll */}
-                  <span className="ms-2 d-none d-sm-inline">Payroll</span>
+                  <i className="bi bi-wallet2 ms-2"></i>
+                  <span className="ms-2 d-none d-sm-inline px-2">Payroll</span>
                 </Link>
               </li>
 
               <li className="w-100" onClick={handleLogout}>
                 <Link className="nav-link px-0 align-middle text-white">
                   <i className="bi-power ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">Logout</span>
+                  <span className="ms-2 d-none d-sm-inline px-2">Logout</span>
                 </Link>
               </li>
             </ul>
@@ -102,7 +121,7 @@ const Dashboard = () => {
         </div>
         <div className="col p-0 m-0">
           <div className="p-2 d-flex justify-content-center shadow">
-            <h4>Emoployee Management System</h4>
+            <h4>Employee Management System</h4>
           </div>
           <Outlet />
         </div>
