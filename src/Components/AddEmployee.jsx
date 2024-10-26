@@ -13,7 +13,7 @@ const AddEmployee = () => {
     image: "",
   });
   const [category, setCategory] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -29,26 +29,27 @@ const AddEmployee = () => {
   }, []);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const formData = new FormData();
-    formData.append('name', employee.name);
-    formData.append('email', employee.email);
-    formData.append('password', employee.password);
-    formData.append('address', employee.address);
-    formData.append('salary', employee.salary);
-    formData.append('image', employee.image);
-    formData.append('category_id', employee.category_id);
+    formData.append("name", employee.name);
+    formData.append("email", employee.email);
+    formData.append("password", employee.password);
+    formData.append("address", employee.address);
+    formData.append("salary", employee.salary);
+    formData.append("image", employee.image);
+    formData.append("category_id", employee.category_id);
 
-    axios.post('http://localhost:4000/auth/add_employee', formData)
-    .then(result => {
-        if(result.data.Status) {
-            navigate('/dashboard/employee')
+    axios
+      .post("http://localhost:4000/auth/add_employee", formData)
+      .then((result) => {
+        if (result.data.Status) {
+          navigate("/dashboard/employee");
         } else {
-            alert(result.data.Error)
+          alert(result.data.Error);
         }
-    })
-    .catch(err => console.log(err))
-  }
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
@@ -127,16 +128,29 @@ const AddEmployee = () => {
             />
           </div>
           <div className="col-12">
-            <label for="category" className="form-label">
+            <label htmlFor="category" className="form-label">
               Category
             </label>
-            <select name="category" id="category" className="form-select"
-                onChange={(e) => setEmployee({...employee, category_id: e.target.value})}>
-              {category.map((c) => {
-                return <option value={c._id}>{c.name}</option>;
-              })}
+            <select
+              name="category"
+              id="category"
+              className="form-select"
+              onChange={(e) =>
+                setEmployee({ ...employee, category_id: e.target.value })
+              }
+              defaultValue="" // Set initial value to empty
+            >
+              <option value="" disabled>
+                Select one category
+              </option>
+              {category.map((c) => (
+                <option key={c._id} value={c._id}>
+                  {c.name}
+                </option>
+              ))}
             </select>
           </div>
+
           <div className="col-12 mb-3">
             <label className="form-label" for="inputGroupFile01">
               Select Image
@@ -146,7 +160,9 @@ const AddEmployee = () => {
               className="form-control rounded-0"
               id="inputGroupFile01"
               name="image"
-              onChange={(e) => setEmployee({...employee, image: e.target.files[0]})}
+              onChange={(e) =>
+                setEmployee({ ...employee, image: e.target.files[0] })
+              }
             />
           </div>
           <div className="col-12">

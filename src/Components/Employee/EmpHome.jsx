@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 const EmpHome = () => {
   const [profile, setProfile] = useState();
   const [totalLeaves, setTotalLeaves] = useState(24);
-  const [pendingLeaves, setPendingLeaves] = useState(5);
   const [currentDateTime, setCurrentDateTime] = useState(
     new Date().toLocaleString()
   );
@@ -12,6 +11,7 @@ const EmpHome = () => {
   const [currentMonthPresentCount, setCurrentMonthPresentCount] = useState(0);
   const [currentMonthTotalDays, setCurrentMonthTotalDays] = useState(0);
   const [payroll, setPayRoll] = useState([]);
+  const [pendingCounts, setPendingCount] = useState();
 
   useEffect(() => {
     let user_id = localStorage.getItem("userid");
@@ -22,6 +22,25 @@ const EmpHome = () => {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    fetchLeaveRecords();
+  }, []);
+
+  const fetchLeaveRecords = () => {
+    let user_id = localStorage.getItem("userid");
+    axios
+      .get(`http://localhost:4000/auth/leave/${user_id}`)
+      .then((result) => {
+        if (result.data.Status) {
+          const acceptedCount = result?.data.Result.filter(
+            (leave) => leave.status === "accepted"
+          ).length;
+          setPendingCount(totalLeaves - acceptedCount);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
     // On initial load, calculate the current and previous month data for summary
@@ -190,7 +209,7 @@ const EmpHome = () => {
             <div className="card-body text-center">
               <i className="fs-4 bi-clock text-warning mb-3"></i>
               <h4 className="card-title">Pending Leaves</h4>
-              <p className="display-4 text-warning">{pendingLeaves}</p>
+              <p className="display-4 text-warning">{pendingCounts}</p>
             </div>
           </div>
         </div>

@@ -29,6 +29,28 @@ const PayRoll = () => {
         }
       });
   };
+
+  const downloadPayroll = () => {
+    axios({
+      url: "http://localhost:4000/auth/download_payroll",
+      method: "GET",
+      responseType: "blob",
+    })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "payroll_data.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch((error) => {
+        alert("Failed to download payroll data.");
+        console.log(error);
+      });
+  };
+
   return (
     <div className="px-5 mt-3">
       <div className="d-flex justify-content-center">
@@ -37,6 +59,12 @@ const PayRoll = () => {
       <Link to="/dashboard/add_payroll" className="btn btn-success">
         Add PayRoll
       </Link>
+      <button
+        className="btn btn-info ms-2"
+        onClick={downloadPayroll}
+      >
+        Download Payroll
+      </button>
       <div className="mt-3">
         <table className="table">
           <thead>
@@ -47,7 +75,6 @@ const PayRoll = () => {
               <th>Bonus</th>
               <th>Deductions</th>
               <th>Payment Date</th>
-              {/* <th>Action</th> */}
             </tr>
           </thead>
           <tbody>
@@ -59,20 +86,6 @@ const PayRoll = () => {
                 <td>{p.bonus || "N/A"}</td>
                 <td>{p.deductions || "N/A"}</td>
                 <td>{new Date(p.payment_date).toLocaleDateString()}</td>
-                {/* <td>
-                  <Link
-                    to={`/dashboard/edit_payroll/` + p._id}
-                    className="btn btn-info btn-sm me-2"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    className="btn btn-warning btn-sm"
-                    onClick={() => handleDelete(p._id)}
-                  >
-                    Delete
-                  </button>
-                </td> */}
               </tr>
             ))}
           </tbody>

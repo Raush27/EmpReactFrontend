@@ -50,6 +50,7 @@ const Home = () => {
       }
     })
   }
+  
   return (
     <div>
       <div className='p-3 d-flex justify-content-around mt-3'>
@@ -94,8 +95,8 @@ const Home = () => {
           </thead>
           <tbody>
             {
-              admins.map(a => (
-                <tr>
+              admins.map((a,idx) => (
+                <tr key={idx}>
                   <td>{a.email}</td>
                   {/* <td>
                   <button

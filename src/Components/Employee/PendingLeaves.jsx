@@ -168,7 +168,6 @@ const PendingLeaves = () => {
             {leaveData.length > 0 ? (
               leaveData.map((leave) => (
                 <tr key={leave.leave_id}>
-                  {" "}
                   {/* Assume leave_id is provided */}
                   <td>{leave.leave_type}</td>
                   <td>{new Date(leave.start_date).toLocaleDateString()}</td>

@@ -34,7 +34,7 @@ const AddPayroll = () => {
 
     // Check if all required fields are filled in
     if (!payroll.employee_id || !payroll.salary || !payroll.payment_date) {
-        toast("Please fill in all the required fields.");
+      toast("Please fill in all the required fields.");
       return;
     }
 
@@ -49,7 +49,10 @@ const AddPayroll = () => {
         }
       })
       .catch((err) => {
-        toast(err.response.data.Error || "Something went wrong while adding payroll.");
+        toast(
+          err.response.data.Error ||
+            "Something went wrong while adding payroll."
+        );
       });
   };
 
@@ -72,8 +75,12 @@ const AddPayroll = () => {
             >
               <option value="">Select Employee</option>
               {employees.map((emp) => (
-                <option key={emp._id} value={emp._id}>
-                  {emp.name}
+                <option
+                  key={emp._id}
+                  value={emp._id}
+                  disabled={emp.status !== "active"}
+                >
+                  {emp.name} {emp.status !== "active" ? "(Inactive)" : ""}
                 </option>
               ))}
             </select>

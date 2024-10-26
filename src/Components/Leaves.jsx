@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import * as XLSX from "xlsx"; // Import xlsx library
 
 const Leaves = () => {
   const [leaveRecords, setLeaveRecords] = useState([]);
@@ -32,7 +33,9 @@ const Leaves = () => {
           alert("Leave accepted successfully");
           setLeaveRecords((prev) =>
             prev.map((leave) =>
-              leave._id === leaveId ? { ...leave, status: "accepted", remarks } : leave
+              leave._id === leaveId
+                ? { ...leave, status: "accepted", remarks }
+                : leave
             )
           );
           setRemarks("");
@@ -52,7 +55,9 @@ const Leaves = () => {
           alert("Leave rejected successfully");
           setLeaveRecords((prev) =>
             prev.map((leave) =>
-              leave._id === leaveId ? { ...leave, status: "rejected", remarks } : leave
+              leave._id === leaveId
+                ? { ...leave, status: "rejected", remarks }
+                : leave
             )
           );
           setRemarks("");
@@ -64,13 +69,35 @@ const Leaves = () => {
       .catch((err) => console.log(err));
   };
 
+  // Function to download leave records as Excel
+  const downloadExcel = () => {
+    const formattedRecords = leaveRecords.map((leave) => ({
+      "Employee Name": leave.employee_id?.name || "N/A",
+      "Start Date": formatDate(leave.start_date),
+      "End Date": formatDate(leave.end_date),
+      Status: leave.status,
+      Remarks: leave.remarks || "N/A",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedRecords);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Leave Records");
+
+    // Create a downloadable link
+    XLSX.writeFile(workbook, "Leave_Records.xlsx");
+  };
+
   return (
     <div className="container my-5">
       <div className="row justify-content-center">
         <h3 className="text-center mb-4">Leave Records</h3>
       </div>
 
-      <div className="mt-5">
+      <button className="btn btn-primary" onClick={downloadExcel}>
+        Download Leave
+      </button>
+
+      <div className="mt-4">
         <h3>Leave Records</h3>
         <table className="table table-bordered table-striped mt-3">
           <thead className="table-dark">
@@ -87,7 +114,7 @@ const Leaves = () => {
             {leaveRecords.length > 0 ? (
               leaveRecords.map((leave) => (
                 <tr key={leave._id}>
-                  <td>{leave.employee_id.name}</td>
+                  <td>{leave.employee_id?.name}</td>
                   <td>{formatDate(leave.start_date)}</td>
                   <td>{formatDate(leave.end_date)}</td>
                   <td>{leave.status}</td>
@@ -128,7 +155,7 @@ const Leaves = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="text-center">
+                <td colSpan="6" className="text-center">
                   No leave records found.
                 </td>
               </tr>

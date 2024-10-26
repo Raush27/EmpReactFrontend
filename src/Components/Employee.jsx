@@ -19,27 +19,33 @@ const Employee = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const AdminRecords = () => {
-    axios.get("http://localhost:4000/auth/admin_records").then((result) => {
-      if (result.data.Status) {
-        setAdmins(result.data.Result);
-      } else {
-        alert(result.data.Error);
-      }
-    });
+  const handleStatusChange = (id, status) => {
+    const statusValue = status === "active" ? 0 : 1; 
+    const confirmationMessage =
+      status === "active"
+        ? "Are you sure you want to deactivate this employee?"
+        : "Are you sure you want to activate this employee?";
+    const confirmStatusChange = window.confirm(confirmationMessage);
+    if (confirmStatusChange) {
+      axios
+        .put(`http://localhost:4000/auth/update_employee_status/${id}`, {
+          status: statusValue,
+        })
+        .then((result) => {
+          if (result.data.Status) {
+            window.location.reload();
+          } else {
+            alert(result.data.Error);
+          }
+        })
+        .catch((err) => {
+          console.error("Error updating employee status:", err);
+          alert("An error occurred while updating the employee status.");
+        });
+    }
   };
+  
 
-  const handleDelete = (id) => {
-    axios
-      .delete("http://localhost:4000/auth/delete_employee/" + id)
-      .then((result) => {
-        if (result.data.Status) {
-          window.location.reload();
-        } else {
-          alert(result.data.Error);
-        }
-      });
-  };
   return (
     <div className="px-5 mt-3">
       <div className="d-flex justify-content-center">
@@ -62,8 +68,8 @@ const Employee = () => {
             </tr>
           </thead>
           <tbody>
-            {employee.map((e) => (
-              <tr>
+            {employee.map((e, idx) => (
+              <tr key={idx}>
                 <td>{e.name}</td>
                 <td>
                   <img
@@ -74,7 +80,7 @@ const Employee = () => {
                 <td>{e.email}</td>
                 <td>{e.address}</td>
                 <td>{e.salary}</td>
-                <td>{e.status}</td>
+                <td>{e.status[0].toUpperCase() + e.status.substring(1)}</td>
 
                 <td>
                   <Link
@@ -84,10 +90,12 @@ const Employee = () => {
                     Edit
                   </Link>
                   <button
-                    className="btn btn-warning btn-sm"
-                    onClick={() => handleDelete(e._id)}
+                    className={`btn ${
+                      e.status === "active" ? "btn-warning" : "btn-success"
+                    }`}
+                    onClick={() => handleStatusChange(e._id, e.status)}
                   >
-                    Delete
+                    {e.status === "active" ? "Deactivate" : "Activate"}
                   </button>
                 </td>
               </tr>
