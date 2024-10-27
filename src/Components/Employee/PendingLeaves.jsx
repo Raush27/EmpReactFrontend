@@ -11,10 +11,59 @@ const PendingLeaves = () => {
     end_date: "",
     reason: "",
   });
+  const [attendanceData, setAttendanceData] = useState([]);
+
+  const [previousMonthPresentCount, setPreviousMonthPresentCount] = useState(0);
+  const [currentMonthPresentCount, setCurrentMonthPresentCount] = useState(0);
+
+  const [currentMonthTotalDays, setCurrentMonthTotalDays] = useState(0);
+  const [previousMonthTotalDays, setPreviousMonthTotalDays] = useState(0);
 
   useEffect(() => {
     fetchLeaveRecords();
   }, []);
+
+  useEffect(() => {
+    // On initial load, calculate the current and previous month data for summary
+    calculateMonthData(
+      new Date().getMonth() + 1,
+      new Date().getFullYear(),
+      "current"
+    );
+    const previousMonth =
+      new Date().getMonth() === 0 ? 12 : new Date().getMonth();
+    const previousYear =
+      new Date().getMonth() === 0
+        ? new Date().getFullYear() - 1
+        : new Date().getFullYear();
+    calculateMonthData(previousMonth, previousYear, "previous");
+  }, []);
+
+  const fetchAttendanceRecords = (month, year, type) => {
+    let user_id = localStorage.getItem("userid");
+    axios
+      .get(`http://localhost:4000/auth/attendance_report/${user_id}`)
+      .then((result) => {
+        if (result.data.status) {
+          const filteredAttendance = result.data.attendance.filter(
+            (attendance) => {
+              const attendanceDate = new Date(attendance.date);
+              return (
+                attendanceDate.getMonth() + 1 === month &&
+                attendanceDate.getFullYear() === year
+              );
+            }
+          );
+
+          if (type === "current") {
+            setAttendanceData(filteredAttendance); // Update the table for the current filter
+          }
+
+          calculatePresentCount(filteredAttendance, type); // Calculate present count
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   const fetchLeaveRecords = () => {
     let user_id = localStorage.getItem("userid");
@@ -26,6 +75,28 @@ const PendingLeaves = () => {
         }
       })
       .catch((err) => console.log(err));
+  };
+
+  const calculatePresentCount = (attendanceData, type) => {
+    const present = attendanceData.filter(
+      (record) => record.status === "Present"
+    ).length;
+    if (type === "current") {
+      setCurrentMonthPresentCount(present);
+    } else if (type === "previous") {
+      setPreviousMonthPresentCount(present);
+    }
+  };
+
+  const calculateMonthData = (month, year, type) => {
+    const daysInMonth = new Date(year, month, 0).getDate(); // Get total days in the month
+    if (type === "current") {
+      setCurrentMonthTotalDays(daysInMonth);
+      fetchAttendanceRecords(month, year, type); // Fetch records for the current month
+    } else if (type === "previous") {
+      setPreviousMonthTotalDays(daysInMonth);
+      fetchAttendanceRecords(month, year, type); // Fetch records for the previous month
+    }
   };
 
   const openForm = () => setIsOpen(true);
@@ -50,20 +121,19 @@ const PendingLeaves = () => {
       .then((result) => {
         if (result.data.Status) {
           toast.success("Leave applied successfully");
-          fetchLeaveRecords(); 
-          closeForm(); 
+          fetchLeaveRecords();
+          closeForm();
         } else {
           toast.error(result.data.Error || "Failed to apply for leave.");
         }
       })
       .catch((err) => {
-        const errorMessage = err.response?.data?.Error || "Something went wrong!";
-        console.error("Error:", errorMessage); 
-        toast.error(errorMessage); 
+        const errorMessage =
+          err.response?.data?.Error || "Something went wrong!";
+        console.error("Error:", errorMessage);
+        toast.error(errorMessage);
       });
   };
-  
-  
 
   return (
     <div className="container my-5">
@@ -150,6 +220,50 @@ const PendingLeaves = () => {
           </div>
         </div>
       )}
+
+      <div className="row mb-4">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">
+                <i className="bi bi-calendar-check-fill me-2"></i>Previous Month
+                Summary
+              </h5>
+              <p className="card-text">
+                {new Date(
+                  new Date().getMonth() === 0
+                    ? new Date().getFullYear() - 1
+                    : new Date().getFullYear(),
+                  new Date().getMonth() === 0 ? 11 : new Date().getMonth() - 1
+                ).toLocaleString("default", {
+                  month: "long",
+                  year: "numeric",
+                })}
+              </p>
+              <p>Total Days: {previousMonthTotalDays}</p>
+              <p>Present Days: {previousMonthPresentCount}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">
+                <i className="bi bi-calendar-check me-2"></i>Current Month
+                Summary
+              </h5>
+              <p className="card-text">
+                {new Date().toLocaleString("default", {
+                  month: "long",
+                  year: "numeric",
+                })}
+              </p>
+              <p>Total Days: {currentMonthTotalDays}</p>
+              <p>Present Days: {currentMonthPresentCount}</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* List of leave applications */}
       <div className="mt-5">

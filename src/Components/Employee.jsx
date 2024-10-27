@@ -20,7 +20,7 @@ const Employee = () => {
   }, []);
 
   const handleStatusChange = (id, status) => {
-    const statusValue = status === "active" ? 0 : 1; 
+    const statusValue = status === "active" ? 0 : 1;
     const confirmationMessage =
       status === "active"
         ? "Are you sure you want to deactivate this employee?"
@@ -44,7 +44,6 @@ const Employee = () => {
         });
     }
   };
-  
 
   return (
     <div className="px-5 mt-3">
@@ -81,11 +80,16 @@ const Employee = () => {
                 <td>{e.address}</td>
                 <td>{e.salary}</td>
                 <td>{e.status[0].toUpperCase() + e.status.substring(1)}</td>
-
                 <td>
                   <Link
                     to={`/dashboard/edit_employee/` + e._id}
-                    className="btn btn-info btn-sm me-2"
+                    className={`btn btn-info btn-sm me-2 ${
+                      e.status === "inactive" ? "disabled" : ""
+                    }`}
+                    onClick={(e) =>
+                      e.status === "inactive" && e.preventDefault()
+                    }
+                    aria-disabled={e.status === "inactive"}
                   >
                     Edit
                   </Link>

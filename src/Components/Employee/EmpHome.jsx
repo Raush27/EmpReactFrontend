@@ -208,8 +208,8 @@ const EmpHome = () => {
           <div className="card shadow-sm border-0">
             <div className="card-body text-center">
               <i className="fs-4 bi-clock text-warning mb-3"></i>
-              <h4 className="card-title">Pending Leaves</h4>
-              <p className="display-4 text-warning">{pendingCounts}</p>
+              <h4 className="card-title">Balanced Leaves</h4>
+              <p className="display-4 text-warning">{pendingCounts ? pendingCounts : 24}</p>
             </div>
           </div>
         </div>
