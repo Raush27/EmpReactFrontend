@@ -6,6 +6,8 @@ const Leaves = () => {
   const [leaveRecords, setLeaveRecords] = useState([]);
   const [remarks, setRemarks] = useState("");
   const [currentLeaveId, setCurrentLeaveId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(""); // State for search term
+  const [statusMessage, setStatusMessage] = useState(""); // Status for listening/processing popup
 
   useEffect(() => {
     axios
@@ -87,18 +89,83 @@ const Leaves = () => {
     XLSX.writeFile(workbook, "Leave_Records.xlsx");
   };
 
+  const handleVoiceSearch = () => {
+    // Check for both SpeechRecognition and webkitSpeechRecognition
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+  
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      setStatusMessage("Listening...");
+      recognition.start();
+  
+      recognition.onresult = (event) => {
+        setStatusMessage("Processing...");
+        const transcript = event.results[0][0].transcript.toLowerCase().trim();
+  
+        if (transcript.includes("show all leaves")) {
+          setSearchTerm(""); // Reset search term to show all leaves
+        } else if (transcript.includes("leave of")) {
+          const name = transcript.split("leave of")[1]?.trim();
+          if (name) {
+            setSearchTerm(name);
+          } else {
+            alert("Please specify an employee name.");
+          }
+        } else {
+          alert("Command not recognized. Say 'show all leaves' or 'leave of [name]'.");
+        }
+      };
+  
+      recognition.onspeechend = () => {
+        recognition.stop();
+      };
+  
+      recognition.onend = () => {
+        setStatusMessage("");
+      };
+  
+      recognition.onerror = (event) => {
+        console.error("Error with Speech Recognition:", event.error);
+        setStatusMessage("");
+        alert("An error occurred with voice recognition. Please try again.");
+      };
+    } else {
+      alert("Speech Recognition is not supported in this browser.");
+    }
+  };
+  
+
+  // Filter leave records based on the searchTerm with exact match for employee name
+  const filteredLeaves = leaveRecords.filter((leave) =>
+    searchTerm
+      ? leave.employee_id?.name?.toLowerCase() === searchTerm.toLowerCase()
+      : true
+  );
+
   return (
     <div className="container my-5">
-      <div className="row justify-content-center">
-        <h3 className="text-center mb-4">Leave Records</h3>
+      <div className="d-flex justify-content-between">
+        <h3>Leave Records</h3>
+        <button onClick={handleVoiceSearch} className="btn btn-primary">
+          Search by Voice
+        </button>
       </div>
-
+      {statusMessage && (
+        <div className="overlay">
+          <div className="status-popup">
+            <div>{statusMessage}</div>
+            <p className="listening-text">
+              Please wait, we're processing your request.
+            </p>
+          </div>
+        </div>
+      )}
       <button className="btn btn-primary" onClick={downloadExcel}>
         Download Leave
       </button>
-
       <div className="mt-4">
-        <h3>Leave Records</h3>
         <table className="table table-bordered table-striped mt-3">
           <thead className="table-dark">
             <tr>
@@ -111,8 +178,8 @@ const Leaves = () => {
             </tr>
           </thead>
           <tbody>
-            {leaveRecords.length > 0 ? (
-              leaveRecords.map((leave) => (
+            {filteredLeaves.length > 0 ? (
+              filteredLeaves.map((leave) => (
                 <tr key={leave._id}>
                   <td>{leave.employee_id?.name}</td>
                   <td>{formatDate(leave.start_date)}</td>
